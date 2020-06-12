@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>All_Active_Salesforce_Apps</fullName>
+    <columns>NAME</columns>
+    <columns>App__c</columns>
+    <columns>App_Description__c</columns>
+    <columns>Org__c</columns>
+    <columns>Stage__c</columns>
+    <columns>In_Production_Date__c</columns>
+    <columns>Platform__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Platform__c</field>
+        <operation>equals</operation>
+        <value>SFDC</value>
+    </filters>
+    <filters>
+        <field>Stage__c</field>
+        <operation>notEqual</operation>
+        <value>Discontinued</value>
+    </filters>
+    <label>All Active Salesforce Apps</label>
+</ListView>

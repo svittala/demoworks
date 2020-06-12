@@ -1,0 +1,76 @@
+
+
+assignUserApp Class:
+    a future callout class so it can be scheduled
+
+Function:
+createUserPersonAccount ( input parameter : appUserId)
+    Dependencis Object:
+        App_User_C: App_User_C has an entry per User for their access to an App. The entry also provides information as to the remote org where the app is installed.
+    Function Logic
+    1) looks for user in the  App_User_c object to get  the User and App information to determine the org where the user needs to be created.
+    2) Search remote system if they have a user record in the remote system and if they have person account  in the remote org
+    3)  create a Person account in the remote org for the user if they do not exist.
+    Note: This checks the RecordTypes "Employee" and "CBP_Employee" if any new person record type is expected that needs to be added here too
+
+Function:
+assignUserApp ( input paramters: appID and UserId) 
+Dependencis Objects:
+        App_User_C          :App_User_C has an entry per User for their access to an App. The entry also provides information as to the remote org where the app is installed.
+        Access_Request__c   :Access_Request__c has an entry for every access request that goes through a business approval process. Once the business approval is done, 
+            this function creates the appropriate Profile, Permission Sets and Group assignment for the apporved user request.
+            this function processes one access request at a time. This code is not bulkfied as it was expected to be done called from a future call at the approval process. 
+        Role_Permission__c  : for every app roles there is an entry of the Permission Sets associated. ( use this as a reference data)
+        App_User_Role__c    :For every App and User combination - there is a role that is Provisioned for the user in the target orgs.
+             a union of the app user role and the role permission gives you the list of permissionsets that must be provided to the user in remote org
+             the module uses 2 seperate queries to get the permission set lists. Keeping this as 2 Lists helps the final update back to the "Provision" field
+        App_User_Group__c:  This provides the Group Permissions selected by requester for each apps the users are given access
+
+Function Logic
+    1) Initialize the Lists   
+            au : App user requests that needs to be Provisioned
+            ar : access requests that needs to be Provisioned
+    2) Locate the user in the remote system and confirm the license, profile information and the object Id reference. 
+            create a new user if the user is not found in the remote org.
+    3) Get the current permissionsets assigned to the user in the remote system
+            compare to the permissionset you are going to add and create a differene list.
+    4)  
+
+            
+
+        AUGs = [SELECT id, Provisioned__c, Related_Groups__r.API_Name__c FROM App_User_Group__c WHERE App_User__c = :au.Id AND Related_Groups__r.API_Name__c != '' AND Provisioned__c = false]; 
+       
+
+      list<App_User_Role__c> AppUserRole = [SELECT Id,App_Role__c,Provisioned__c FROM App_User_Role__c 
+                                              WHERE App_User__c = :au.Id AND Provisioned__c=False]; 
+        Set<Id> auRoleIDs = New Set<Id>();
+        For(App_User_Role__c aurid : AppUserRole ) {
+            auRoleIDs.add(aurid.App_Role__c); 
+        }
+        system.debug('@@@auRoleIDs' + auRoleIDs);
+        list<Role_Permission__c> Perms = [SELECT Permission_Set__r.API_Name__c FROM Role_Permission__c 
+                                          WHERE Permission_Set__r.API_Name__c != '' 
+                                          AND App_Role__c in :auRoleIDs];
+
+
+3 lists
+1) user - person record
+2  profile
+3)Permmission
+    role-permission - 4 other permission sets
+        loops though that to determin additonal permission sets
+        loops though that to determin additonal groups
+        give access in target org for the Permmission sets
+        give access in target org for the grouos
+4) Group
+    loops thoruhg the groups and grant acces
+
+option 2
+   role-permission - 4 other permission sets
+           loops though that to determin additonal groups
+        give access in target org for the groups
+        give access in target org for the grouop
+
+
+
+When logout is triggered from the OAM domain (from applications protected by OAM) the partner will receive a LogoutRequest from OAM and should return the LogoutResponse to the OAM SAML 2.0 Single Logout Service URL. OAM logout expires the sessions for all OAM agents that the user has accessed during the session, and OAM alsos check if any of the federated partners accessed during the session are enabled for SLO. It checks the "Global Logout" setting in the partner configuration in OAM Identity Federation. If the partner is configured for Global Logout and there is a SingleLogoutService URL defined in the partner metadata - or the "Logout Request URL" is set if the partner Service Details were configured manually in OAM Console IdP/SP Administration - OAM will send a SAML LogoutRequest to that partner. It will wait for the SAML SLO LogoutResponse from that partner and then conclude session termination on OAM side finally redirecting to the end_url and OAM logout processing is completed.

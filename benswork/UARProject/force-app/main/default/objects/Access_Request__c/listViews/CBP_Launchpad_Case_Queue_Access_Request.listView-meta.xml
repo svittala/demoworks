@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CBP_Launchpad_Case_Queue_Access_Request</fullName>
+    <columns>NAME</columns>
+    <columns>App__c</columns>
+    <columns>Request_Owner__c</columns>
+    <columns>Status__c</columns>
+    <columns>Comments__c</columns>
+    <columns>CREATED_DATE</columns>
+    <filterScope>Queue</filterScope>
+    <filters>
+        <field>Status__c</field>
+        <operation>equals</operation>
+        <value>Approved</value>
+    </filters>
+    <label>CBP Launchpad Queue - UARs</label>
+    <queue>CBP_Launchpad_Case_Queue</queue>
+    <sharedTo>
+        <allInternalUsers/>
+    </sharedTo>
+</ListView>

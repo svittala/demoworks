@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>All_Live_Apps</fullName>
+    <columns>NAME</columns>
+    <columns>App__c</columns>
+    <columns>App_Description__c</columns>
+    <columns>Org__c</columns>
+    <columns>Stage__c</columns>
+    <columns>In_Production_Date__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Stage__c</field>
+        <operation>equals</operation>
+        <value>Live</value>
+    </filters>
+    <label>All Live Apps</label>
+</ListView>

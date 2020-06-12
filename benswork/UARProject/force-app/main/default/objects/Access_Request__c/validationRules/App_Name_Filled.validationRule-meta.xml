@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>App_Name_Filled</fullName>
+    <active>false</active>
+    <errorConditionFormula>ISBLANK(App__c)</errorConditionFormula>
+    <errorDisplayField>App__c</errorDisplayField>
+    <errorMessage>App Name required</errorMessage>
+</ValidationRule>

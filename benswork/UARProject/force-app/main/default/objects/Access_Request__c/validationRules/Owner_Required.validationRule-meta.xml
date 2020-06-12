@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Owner_Required</fullName>
+    <active>false</active>
+    <errorConditionFormula>ISBLANK(  Requester_User__c  )</errorConditionFormula>
+    <errorDisplayField>Requester_User__c</errorDisplayField>
+    <errorMessage>Owner cannot be blank</errorMessage>
+</ValidationRule>

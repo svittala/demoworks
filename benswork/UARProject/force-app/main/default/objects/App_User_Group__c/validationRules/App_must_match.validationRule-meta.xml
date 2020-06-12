@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>App_must_match</fullName>
+    <active>true</active>
+    <errorConditionFormula>App_User__r.App__c  &lt;&gt;  Related_Groups__r.App__c</errorConditionFormula>
+    <errorMessage>You must choose a group for this Application</errorMessage>
+</ValidationRule>

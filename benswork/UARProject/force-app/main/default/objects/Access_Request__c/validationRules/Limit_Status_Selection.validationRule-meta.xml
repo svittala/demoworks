@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Limit_Status_Selection</fullName>
+    <active>true</active>
+    <errorConditionFormula>$Setup.Org_Settings__c.Bypass_Validation_Rules__c = FALSE 
+&amp;&amp; 
+( 
+AND( 
+ISPICKVAL(PRIORVALUE (Status__c), &quot;Pending&quot;), 
+OR( 
+ISPICKVAL(Status__c, &quot;Approved by Business Owner&quot;), 
+ISPICKVAL(Status__c, &quot;Approved&quot;),
+ISPICKVAL(Status__c, &quot;Complete&quot;)) 
+) 
+) 
+|| 
+( 
+AND( 
+ISPICKVAL(PRIORVALUE (Status__c), &quot;Approved by Supervisor&quot;), 
+OR( 
+ISPICKVAL(Status__c, &quot;Approved&quot;),
+ISPICKVAL(Status__c, &quot;Complete&quot;)),
+(Approval_Required_Rollup__c &gt; 0) 
+) 
+)
+|| 
+( 
+AND( 
+ISPICKVAL(PRIORVALUE (Status__c), &quot;Rejected&quot;), 
+OR(
+ISPICKVAL(Status__c, &quot;Pending&quot;),
+ISPICKVAL(Status__c, &quot;Approved by Supervisor&quot;),
+ISPICKVAL(Status__c, &quot;Approved by Business Owner&quot;), 
+ISPICKVAL(Status__c, &quot;Approved&quot;),
+ISPICKVAL(Status__c, &quot;Complete&quot;)) 
+) 
+)
+|| 
+( 
+AND( 
+ISPICKVAL(PRIORVALUE (Status__c), &quot;Approved&quot;), 
+OR(
+ISPICKVAL(Status__c, &quot;Pending&quot;),
+ISPICKVAL(Status__c, &quot;Approved by Supervisor&quot;),
+ISPICKVAL(Status__c, &quot;Approved by Business Owner&quot;), 
+ISPICKVAL(Status__c, &quot;Rejected&quot;)) 
+) 
+)</errorConditionFormula>
+    <errorMessage>You cannot update the status to this value.</errorMessage>
+</ValidationRule>
